@@ -40,7 +40,6 @@ const ForgetPassword = () => {
     } catch (error) {
       toast.error("Server error. Try again later.");
       console.error(error);
-      navigate(`/reset-password/:${email}`);
     }
   };
 
