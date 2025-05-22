@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -31,8 +31,6 @@ const ForgetPassword = () => {
 
       if (response.ok) {
         toast.success(data.message);
-        setLoggedIn(true);
-        setUser(data.user);
         navigate(`/reset-password:${email}`);
       } else {
         toast.error(data.message || "Email Not exist");

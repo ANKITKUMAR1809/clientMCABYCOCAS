@@ -67,6 +67,8 @@ const ResetPassword = () => {
       );
       const data = await response.json();
       if (response.ok) {
+        toast.success(data.message);
+        navigate("/faculty/login");
       }
     } catch (error) {
       toast.error("Server error. Try again later.");
