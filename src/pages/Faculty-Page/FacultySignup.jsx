@@ -8,6 +8,7 @@ const FacultySignup = () => {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (e) => {
@@ -19,10 +20,20 @@ const FacultySignup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
     try {
-      await axios.post("http://localhost:5000/auth/faculty-signup", formData);
+      await axios.post(
+        "https://collegeservermcabycocas.onrender.com/auth/faculty-signup",
+        formData,
+        { withCredentials: true }
+      );
       toast.success("Signup successful!");
-      setFormData({ name: "", email: "", password: "" });
+      setFormData({ name: "", email: "", password: "", confirmPassword: "" });
     } catch (error) {
       console.error(error);
       toast.error("Signup failed. Try again.");
@@ -30,57 +41,55 @@ const FacultySignup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 to-black px-4 py-8">
       <motion.div
-        className="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-md bg-zinc-800/40 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-zinc-700"
       >
-        <h2 className="text-3xl font-bold text-center text-green-700 mb-6">
+        <h2 className="text-3xl font-bold text-center text-white mb-6 tracking-tight">
           Faculty Signup
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">Name</label>
-            <input
-              type="text"
-              name="name"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-          </div>
 
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              name="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              name="password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {["name", "email", "password", "confirmPassword"].map((field, index) => (
+            <motion.div
+              key={field}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 * index }}
+              className="relative"
+            >
+              <input
+                type={field.includes("password") ? "password" : field}
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                required
+                className="peer w-full px-4 py-3 text-white bg-zinc-800 border border-zinc-600 rounded-lg placeholder-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder={
+                  field === "confirmPassword"
+                    ? "Confirm Password"
+                    : field.charAt(0).toUpperCase() + field.slice(1)
+                }
+              />
+              <label
+                htmlFor={field}
+                className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-1 peer-focus:text-sm peer-focus:text-indigo-400"
+              >
+                {field === "confirmPassword"
+                  ? "Confirm Password"
+                  : field.charAt(0).toUpperCase() + field.slice(1)}
+              </label>
+            </motion.div>
+          ))}
 
           <motion.button
             type="submit"
-            whileTap={{ scale: 0.95 }}
-            className="w-full bg-green-600 text-white font-semibold py-2 rounded-lg shadow hover:bg-green-700 transition duration-300"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 transition duration-300 text-white font-semibold rounded-lg shadow-md shadow-indigo-900"
           >
             Sign Up
           </motion.button>

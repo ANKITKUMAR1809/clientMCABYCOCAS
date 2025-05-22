@@ -5,6 +5,8 @@ import { AnimatePresence } from 'framer-motion';
 import { Home, About, Faculty, Student, NotFound, Notification, FacultySignup, FacultyLogin, FacultyDashboard } from './pages/index.js';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
+import ForgotPassword from './components/ForgetPassword.jsx';
+import ResetPassword from './components/ResetPassword.jsx';
 const AnimatedRoutes = () => {
   const location = useLocation();
 
@@ -19,6 +21,9 @@ const AnimatedRoutes = () => {
         <Route path="/faculty/dashboard" element={<FacultyDashboard/>} />
         <Route path='/faculty' element={<Faculty />} />
         <Route path='/Student' element={<Student />} />
+        <Route path='/forget-password' element={<ForgotPassword />} />
+        <Route path='/reset-password/:email' element={<ResetPassword />} />
+
         <Route path='*' element={<NotFound />} />
       </Routes>
     </AnimatePresence>

@@ -1,35 +1,41 @@
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FacultyContext from "../../context/FacultyContext";
+import { Eye } from "lucide-react";
+import { EyeClosed } from "lucide-react";
+
 const FacultyLogin = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+
   const navigate = useNavigate();
-  const {setLoggedIn,loggedIn, user, setUser} = useContext(FacultyContext);
-  
-  useEffect(()=>{
-    if(loggedIn && user)
-    {
-      console.log(user,loggedIn)
-      navigate('/faculty')
+  const { setLoggedIn, loggedIn, user, setUser } = useContext(FacultyContext);
+
+  useEffect(() => {
+    if (loggedIn && user) {
+      navigate("/faculty");
     }
-  },[loggedIn,navigate])
+  }, [loggedIn, user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://collegeservermcabycocas.onrender.com/auth/faculty-login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://collegeservermcabycocas.onrender.com/auth/faculty-login",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
 
@@ -48,59 +54,93 @@ const FacultyLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 to-black px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-950 via-zinc-900 to-black px-4 py-10">
       <motion.div
-        initial={{ scale: 0.95, opacity: 0, y: 30 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="bg-white rounded-xl shadow-2xl p-10 max-w-xl w-full"
+        initial={{ y: 40, opacity: 0, scale: 0.95 }}
+        animate={{ y: 0, opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="bg-zinc-900 text-white rounded-2xl shadow-2xl p-10 w-full max-w-md"
       >
-        <h2 className="text-3xl font-bold text-center text-zinc-800 mb-6">
+        <motion.h2
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="text-3xl font-bold text-center mb-6 text-white"
+        >
           Faculty Login
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium mb-1 text-zinc-700">
-              Email
-            </label>
+        </motion.h2>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <label className="block text-sm font-medium mb-1">Email</label>
             <input
               type="email"
               name="email"
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-700"
               placeholder="Enter your email"
+              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1 text-zinc-700">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-zinc-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-700"
-              placeholder="Enter your password"
-            />
-          </div>
+          </motion.div>
 
-          <div className="text-right text-sm">
-            <a
-              href="/forgot-password"
-              className="text-zinc-600 hover:text-zinc-800 underline"
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <div className="bg-zinc-800 border border-zinc-700 rounded-xl shadow-sm flex items-center w-full ">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                onChange={handleChange}
+                required
+                placeholder="Enter your password"
+                className="w-full px-4 py-2 bg-zinc-800 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all"
+              />
+              <span className="px-2 cursor-pointer">
+                {showPassword ? (
+                  <EyeClosed
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-zinc-400 hover:text-white transition"
+                  />
+                ) : (
+                  <Eye
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-zinc-400 hover:text-white transition"
+                  />
+                )}
+              </span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-right text-sm"
+          >
+            <Link
+              to="/forget-password"
+              className="text-zinc-400 hover:text-white underline transition"
             >
               Forgot Password?
-            </a>
-          </div>
+            </Link>
+          </motion.div>
 
-          <button
+          <motion.button
             type="submit"
-            className="w-full py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition duration-300 font-medium"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.2 }}
+            className="w-full py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white font-medium shadow-md transition-all"
           >
             Login
-          </button>
+          </motion.button>
         </form>
       </motion.div>
     </div>
