@@ -27,13 +27,15 @@ const FacultySignup = () => {
     }
 
     try {
-      await axios.post(
+      const response = await axios.post(
         "https://collegeservermcabycocas.onrender.com/auth/faculty-signup",
         formData,
         { withCredentials: true }
       );
-      toast.success("Signup successful!");
-      setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+      if (response.ok) {
+        toast.success("Signup successful!");
+        setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+      }
     } catch (error) {
       console.error(error);
       toast.error("Signup failed. Try again.");
@@ -53,37 +55,39 @@ const FacultySignup = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {["name", "email", "password", "confirmPassword"].map((field, index) => (
-            <motion.div
-              key={field}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 * index }}
-              className="relative"
-            >
-              <input
-                type={field.includes("password") ? "password" : field}
-                name={field}
-                value={formData[field]}
-                onChange={handleChange}
-                required
-                className="peer w-full px-4 py-3 text-white bg-zinc-800 border border-zinc-600 rounded-lg placeholder-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder={
-                  field === "confirmPassword"
-                    ? "Confirm Password"
-                    : field.charAt(0).toUpperCase() + field.slice(1)
-                }
-              />
-              <label
-                htmlFor={field}
-                className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-1 peer-focus:text-sm peer-focus:text-indigo-400"
+          {["name", "email", "password", "confirmPassword"].map(
+            (field, index) => (
+              <motion.div
+                key={field}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index }}
+                className="relative"
               >
-                {field === "confirmPassword"
-                  ? "Confirm Password"
-                  : field.charAt(0).toUpperCase() + field.slice(1)}
-              </label>
-            </motion.div>
-          ))}
+                <input
+                  type={field.includes("password") ? "password" : field}
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                  className="peer w-full px-4 py-3 text-white bg-zinc-800 border border-zinc-600 rounded-lg placeholder-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder={
+                    field === "confirmPassword"
+                      ? "Confirm Password"
+                      : field.charAt(0).toUpperCase() + field.slice(1)
+                  }
+                />
+                <label
+                  htmlFor={field}
+                  className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-1 peer-focus:text-sm peer-focus:text-indigo-400"
+                >
+                  {field === "confirmPassword"
+                    ? "Confirm Password"
+                    : field.charAt(0).toUpperCase() + field.slice(1)}
+                </label>
+              </motion.div>
+            )
+          )}
 
           <motion.button
             type="submit"
