@@ -1,22 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ResetPassword = () => {
   const { email } = useParams();
   const [otp, setOtp] = useState("");
   const [verified, setVerified] = useState(false);
+  const [password, setPassword] = useState({
+    password: "",
+    confirmPassword: "",
+  });
 
   const navigate = useNavigate();
-  const [password,setPassword]= useState({password:"",confirmPassword:""});
+
   const handleChange = (e) => {
     setOtp(e.target.value);
   };
+
   const handlePasswordChange = (e) => {
     setPassword((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,20 +36,20 @@ const ResetPassword = () => {
           body: JSON.stringify({ otp }),
         }
       );
-
       const data = await response.json();
 
       if (response.ok) {
         toast.success(data.message);
         setVerified(true);
       } else {
-        toast.error(data.message || "Login failed");
+        toast.error(data.message || "Something went wrong");
       }
     } catch (error) {
       toast.error("Server error. Try again later.");
       console.error(error);
     }
   };
+
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     if (password.password !== password.confirmPassword) {
@@ -65,9 +69,12 @@ const ResetPassword = () => {
         }
       );
       const data = await response.json();
+
       if (response.ok) {
         toast.success(data.message);
-        navigate("/faculty/login");
+        navigate("/login"); // redirect to login after success
+      } else {
+        toast.error(data.message || "Something went wrong");
       }
     } catch (error) {
       toast.error("Server error. Try again later.");
@@ -92,73 +99,80 @@ const ResetPassword = () => {
           Reset Password
         </motion.h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <label className="block text-sm font-medium mb-1">OTP</label>
-            <input
-              type="text"
-              name="otp"
-              onChange={handleChange}
-              required
-              placeholder="Enter OTP (Number)"
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all"
-            />
-          </motion.div>
-          <motion.button
-            type="submit"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-            className="w-full py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white font-medium shadow-md transition-all"
-          >
-            {verified?"OTP Verified":"Verify OTP"}
-          </motion.button>
-        </form>
-        <form onSubmit={handlePasswordSubmit} className="mt-4 space-y-6">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              name="password"
-              onChange={handlePasswordChange}
-              required
-              placeholder="Enter your new password"
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all"
-            />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <label className="block text-sm font-medium mb-1">Confirm Password</label>
-            <input
-              type="text"
-              name="confirmPassword"
-              onChange={handlePasswordChange}
-              required
-              placeholder="Confirm Password"
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all"
-            />
-          </motion.div>
-          <motion.button
-            type="submit"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-            className="w-full py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white font-medium shadow-md transition-all"
-          >
-            Reset Password
-          </motion.button>
-        </form>
+        {!verified && (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <label className="block text-sm font-medium mb-1">OTP</label>
+              <input
+                type="text"
+                name="otp"
+                onChange={handleChange}
+                required
+                placeholder="Enter OTP (Number)"
+                className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all"
+              />
+            </motion.div>
+            <motion.button
+              type="submit"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              className="w-full py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white font-medium shadow-md transition-all"
+            >
+              Verify OTP
+            </motion.button>
+          </form>
+        )}
+
+        {verified && (
+          <form onSubmit={handlePasswordSubmit} className="mt-4 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <label className="block text-sm font-medium mb-1">Password</label>
+              <input
+                type="password"
+                name="password"
+                onChange={handlePasswordChange}
+                required
+                placeholder="Enter your new password"
+                className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all"
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <label className="block text-sm font-medium mb-1">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                name="confirmPassword"
+                onChange={handlePasswordChange}
+                required
+                placeholder="Confirm Password"
+                className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all"
+              />
+            </motion.div>
+            <motion.button
+              type="submit"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              className="w-full py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white font-medium shadow-md transition-all"
+            >
+              Reset Password
+            </motion.button>
+          </form>
+        )}
       </motion.div>
     </div>
   );
