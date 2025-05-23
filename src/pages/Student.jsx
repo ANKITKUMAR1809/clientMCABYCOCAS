@@ -15,13 +15,14 @@ const Student = () => {
     };
 
     try {
-      const response = await fetch("https://collegeservermcabycocas.onrender.com/register-student", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://collegeservermcabycocas.onrender.com/register-student",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
 
       const result = await response.json();
 
@@ -29,7 +30,6 @@ const Student = () => {
         toast.success(result.message);
         e.target.reset();
       } else {
-        // Show error or info toast based on backend message
         toast.error(result.error || result.info || "Something went wrong");
       }
     } catch (error) {
@@ -43,6 +43,7 @@ const Student = () => {
     animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
     exit: { opacity: 0, y: -30, transition: { duration: 0.3 } },
   };
+
   return (
     <>
       <motion.div
@@ -50,58 +51,80 @@ const Student = () => {
         initial="initial"
         animate="animate"
         exit="exit"
+        className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-200 py-12 px-4 sm:px-6 lg:px-12"
       >
         <title>Student | MCABYCOCAS</title>
-        <div className="flex flex-col items-center justify-start h-auto">
-          <form
-            className="flex flex-col items-center justify-center gap-4 w-full bg-gray-100 shadow-md py-8"
-            onSubmit={handleRegisterStudent}
-          >
-            <div className="w-1/2 flex flex-col items-center justify-center gap-4 p-4">
-              <div>
-                <h1 className="flex items-center gap-2 text-4xl font-semibold mb-4">
-                  Register to Get Notification <BellDot />
-                </h1>
-              </div>
 
-              <div className="flex gap-4 w-full justify-between ">
-                <div className="w-full">
-                  <input
-                    type="text"
-                    name="name"
-                    className="border-2 border-black w-full text-center rounded-md p-2"
-                    placeholder="Your Name"
-                  />
-                </div>
-                <div className="w-full">
-                  <input
-                    type="text"
-                    name="batch"
-                    className="border-2 border-black w-full text-center rounded-md p-2"
-                    placeholder="Your Batch Year (2024)"
-                  />
-                </div>
-              </div>
-              <div className="w-full">
-                <input
-                  type="email"
-                  name="email"
-                  id=""
-                  className="border-2 border-black w-full text-center rounded-md p-2"
-                  placeholder="Your Email"
-                />
-              </div>
-              <div className="w-full">
-                <button
-                  type="submit"
-                  className="w-full text-center text-xl bg-green-400 text-white rounded-md shadow-md py-2 transition-all font-semibold hover:scale-105 hover:bg-green-500 active:scale-95"
-                >
-                  Get Notified{" "}
-                </button>
-              </div>
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-start justify-center">
+          {/* Form Container */}
+          <motion.form
+            onSubmit={handleRegisterStudent}
+            className="w-full max-w-md bg-white rounded-xl shadow-xl p-8 flex flex-col gap-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-3xl font-extrabold text-gray-900 flex items-center gap-3">
+              Register to Get Notification <BellDot className="text-green-500" />
+            </h1>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="name" className="text-sm font-semibold text-gray-700">
+                Name
+              </label>
+              <motion.input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your Name"
+                required
+                className="border border-gray-300 rounded-md px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                whileFocus={{ scale: 1.02, boxShadow: "0 0 8px rgba(34,197,94,0.6)" }}
+              />
             </div>
-          </form>
-          <div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="batch" className="text-sm font-semibold text-gray-700">
+                Batch Year
+              </label>
+              <motion.input
+                type="text"
+                id="batch"
+                name="batch"
+                placeholder="Your Batch Year (e.g., 2024)"
+                required
+                className="border border-gray-300 rounded-md px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                whileFocus={{ scale: 1.02, boxShadow: "0 0 8px rgba(34,197,94,0.6)" }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="email" className="text-sm font-semibold text-gray-700">
+                Email Address
+              </label>
+              <motion.input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Your Email"
+                required
+                className="border border-gray-300 rounded-md px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                whileFocus={{ scale: 1.02, boxShadow: "0 0 8px rgba(34,197,94,0.6)" }}
+              />
+            </div>
+
+            <motion.button
+              type="submit"
+              className="mt-4 bg-green-500 text-white text-lg font-semibold py-3 rounded-md shadow-lg hover:bg-green-600 active:scale-95 transition-transform"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Get Notified
+            </motion.button>
+          </motion.form>
+
+          {/* Admission Info Section */}
+          <div className="w-full max-w-3xl">
             <AdmissionInfo />
           </div>
         </div>
