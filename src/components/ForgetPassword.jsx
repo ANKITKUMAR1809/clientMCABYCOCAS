@@ -31,7 +31,7 @@ const ForgetPassword = () => {
 
       if (response.ok) {
         toast.success(data.message);
-        navigate(`/reset-password/:${email}`);
+        navigate(`/reset-password/${encodeURIComponent(email)}`);
       } else {
         toast.error(data.message || "Email Not exist");
       }
