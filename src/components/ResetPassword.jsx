@@ -22,7 +22,7 @@ const ResetPassword = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `https://collegeservermcabycocas.onrender.com/auth/faculty/verify-otp/:${email}`,
+        `https://collegeservermcabycocas.onrender.com/auth/faculty/verify-otp/${email}`,
         {
           method: "POST",
           credentials: "include",
@@ -44,7 +44,6 @@ const ResetPassword = () => {
     } catch (error) {
       toast.error("Server error. Try again later.");
       console.error(error);
-      navigate('faculty/login');
     }
   };
   const handlePasswordSubmit = async (e) => {
@@ -55,7 +54,7 @@ const ResetPassword = () => {
     }
     try {
       const response = await fetch(
-        `https://collegeservermcabycocas.onrender.com/auth/faculty/reset-password/:${email}`,
+        `https://collegeservermcabycocas.onrender.com/auth/faculty/reset-password/${email}`,
         {
           method: "POST",
           credentials: "include",
