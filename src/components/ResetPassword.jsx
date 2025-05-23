@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const ResetPassword = () => {
   const { email } = useParams();
+  const encodedEmail = encodeURIComponent(email);
   const [otp, setOtp] = useState("");
   const [verified, setVerified] = useState(false);
   const [password, setPassword] = useState({
@@ -34,7 +35,7 @@ const ResetPassword = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://collegeservermcabycocas.onrender.com/auth/faculty/verify-otp/${email}`,
+        `https://collegeservermcabycocas.onrender.com/auth/faculty/verify-otp/${encodedEmail}`,
         {
           method: "POST",
           credentials: "include",
@@ -69,7 +70,7 @@ const ResetPassword = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://collegeservermcabycocas.onrender.com/auth/faculty/reset-password/${email}`,
+        `https://collegeservermcabycocas.onrender.com/auth/faculty/reset-password/${encodedEmail}`,
         {
           method: "POST",
           credentials: "include",
