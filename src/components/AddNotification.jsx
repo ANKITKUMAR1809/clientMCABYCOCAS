@@ -24,7 +24,7 @@ const AddNotification = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:4000/publish-notification",
+        "https://collegeservermcabycocas.onrender.com/publish-notification",
         {
           method: "POST",
           credentials: "include",

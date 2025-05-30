@@ -35,7 +35,7 @@ const ResetPassword = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:4000/auth/faculty/verify-otp/${encodedEmail}`,
+        `https://collegeservermcabycocas.onrender.com/auth/faculty/verify-otp/${encodedEmail}`,
         {
           method: "POST",
           credentials: "include",
@@ -70,7 +70,7 @@ const ResetPassword = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:4000/auth/faculty/reset-password/${encodedEmail}`,
+        `https://collegeservermcabycocas.onrender.com/auth/faculty/reset-password/${encodedEmail}`,
         {
           method: "POST",
           credentials: "include",

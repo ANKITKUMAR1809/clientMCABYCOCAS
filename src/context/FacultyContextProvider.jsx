@@ -11,7 +11,7 @@ const FacultyContextProvider = ({ children }) => {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:4000/auth/faculty/verify", {
+        const res = await fetch("https://collegeservermcabycocas.onrender.com/auth/faculty/verify", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

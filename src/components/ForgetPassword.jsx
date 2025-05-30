@@ -16,7 +16,7 @@ const ForgetPassword = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:4000/auth/faculty/forget-password`,
+        `https://collegeservermcabycocas.onrender.com/auth/faculty/forget-password`,
         {
           method: "POST",
           credentials: "include",

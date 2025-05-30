@@ -26,7 +26,7 @@ const FacultyLogin = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:4000/auth/faculty-login", {
+      const response = await fetch("https://collegeservermcabycocas.onrender.com/auth/faculty-login", {
         method: "POST",
         credentials: "include",
         headers: {
