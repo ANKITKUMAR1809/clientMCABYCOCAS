@@ -28,7 +28,7 @@ const FacultySignup = () => {
 
     try {
       const response = await axios.post(
-        "https://collegeservermcabycocas.onrender.com/auth/faculty-signup",
+        "http://localhost:4000/auth/faculty-signup",
         formData,
         { withCredentials: true }
       );

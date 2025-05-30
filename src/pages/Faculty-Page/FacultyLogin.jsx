@@ -3,18 +3,18 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import FacultyContext from "../../context/FacultyContext";
-import { Eye } from "lucide-react";
-import { EyeClosed } from "lucide-react";
+import { Eye, EyeClosed } from "lucide-react";
 
 const FacultyLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
+
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const navigate = useNavigate();
-  const { setLoggedIn, loggedIn, user, setUser } = useContext(FacultyContext);
+  const { loggedIn, user, login } = useContext(FacultyContext);
 
   useEffect(() => {
     if (loggedIn && user) {
@@ -24,25 +24,22 @@ const FacultyLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const response = await fetch(
-        "https://collegeservermcabycocas.onrender.com/auth/faculty-login",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("http://localhost:4000/auth/faculty-login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       const data = await response.json();
 
       if (response.ok) {
         toast.success(data.message);
-        setLoggedIn(true);
-        setUser(data.user);
+        login(data.token, data.user); // store token and user via context
         navigate("/faculty");
       } else {
         toast.error(data.message || "Login failed");
@@ -50,6 +47,8 @@ const FacultyLogin = () => {
     } catch (error) {
       toast.error("Server error. Try again later.");
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,9 +136,12 @@ const FacultyLogin = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.2 }}
-            className="w-full py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white font-medium shadow-md transition-all"
+            disabled={loading}
+            className={`w-full py-2 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white font-medium shadow-md transition-all ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </motion.button>
         </form>
       </motion.div>

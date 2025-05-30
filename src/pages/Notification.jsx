@@ -18,7 +18,7 @@ const Notification = () => {
     const fetchNotifications = async () => {
       try {
         setLoading(true);
-        const res = await fetch("https://collegeservermcabycocas.onrender.com/get-notification");
+        const res = await fetch("http://localhost:4000/get-notification");
         const data = await res.json();
         if (res.ok) {
           setNotifications(data.notifications || []);

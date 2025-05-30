@@ -16,7 +16,7 @@ const Student = () => {
 
     try {
       const response = await fetch(
-        "https://collegeservermcabycocas.onrender.com/register-student",
+        "http://localhost:4000/register-student",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

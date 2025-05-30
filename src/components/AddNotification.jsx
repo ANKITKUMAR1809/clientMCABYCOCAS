@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import FacultyContext from "../context/FacultyContext";
+import { useContext } from "react";
 
 const AddNotification = () => {
   const [notice, setNotice] = useState("");
   const [file, setFile] = useState(null);
+
+  const { token } = useContext(FacultyContext);
 
   const handlePublishNotification = async (e) => {
     e.preventDefault();
@@ -19,11 +23,17 @@ const AddNotification = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("https://collegeservermcabycocas.onrender.com/publish-notification", {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://localhost:4000/publish-notification",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers
+          },
+          body: formData,
+        }
+      );
 
       const data = await response.json();
 
@@ -55,7 +65,10 @@ const AddNotification = () => {
       <form onSubmit={handlePublishNotification} className="space-y-6">
         {/* Notice Input */}
         <div>
-          <label htmlFor="notice" className="block text-lg font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="notice"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
             Notification Message
           </label>
           <textarea
@@ -72,7 +85,10 @@ const AddNotification = () => {
 
         {/* File Upload */}
         <div>
-          <label htmlFor="file" className="block text-lg font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="file"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
             Upload Image (JPG, PNG)
           </label>
           <input

@@ -27,25 +27,9 @@ const pageVariants = {
 };
 
 const Faculty = () => {
-  const {setLoggedIn,loggedIn,user,setUser}=useContext(FacultyContext);
+  const {loggedIn,user,logout}=useContext(FacultyContext);
 
-  const handleLogout = async () => {
-    try {
-      const res = await fetch("https://collegeservermcabycocas.onrender.com/auth/faculty-logout", {
-        method: "GET",
-        credentials: "include",
-      });
-      if (res.ok) {
-        toast.success(res.message);
-        setLoggedIn(false)
-        setUser(null);
 
-      }
-    } catch (error) {
-      toast.error(res.message || "Logout failed");
-      console.error("Logout failed", error);
-    }
-  }
   return (
     <>
       <motion.div
@@ -68,7 +52,7 @@ const Faculty = () => {
             className="flex space-x-4 bg-zinc-800 p-4 text-white justify-between items-center"
           >
             <motion.div variants={itemVariants}>
-              <h1>{loggedIn ? user.name : "Only For Faculty Members"}</h1>
+              <h1>{loggedIn ? user.email : "Only For Faculty Members"}</h1>
             </motion.div>
             {loggedIn && user ? (
               <div className="flex gap-4 text-xl">
@@ -83,7 +67,7 @@ const Faculty = () => {
                 <motion.li variants={itemVariants}>
                   <button 
                     className="hover:underline flex items-center gap-1"
-                    onClick={handleLogout}
+                    onClick={logout}
                   >
                     Logout <Lock />
                   </button>
